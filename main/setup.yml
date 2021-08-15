@@ -1,0 +1,6 @@
+- name: Setup Revving
+  hosts: all
+  remote_user: ubuntu
+  become: yes
+  roles:
+        - role: config_revving

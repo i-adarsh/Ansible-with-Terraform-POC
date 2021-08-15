@@ -1,0 +1,59 @@
+---
+# tasks file for config_revving
+- name: Updating apt
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Installing NodeJS
+  apt:
+      name: nodejs
+      state: latest
+
+- name: Installing NPM
+  apt:
+      name: npm
+      state: latest
+
+- name: Installing Git
+  apt:
+      name: git
+      state: latest
+
+- name: Installing Apache
+  apt:
+      name: apache2
+      state: latest
+
+- name: Updating Packages
+  command: "sudo npm install -g n -y"
+
+- name: Updating npm
+  command: "sudo n stable"
+
+- name: Updating npm
+  command: "npm install -g npm@7.20.5"
+
+- name: Installing yarn
+  command: "npm install yarn -g"
+
+- name: Cloning Git Repository
+  command: "git clone https://github.com/i-adarsh/revvingadmin.git"
+
+- name: Building yarn
+  shell: "cd revvingadmin && sudo yarn && sudo yarn build"
+
+- name: Copying Files
+  become: yes
+  copy:
+      src: /home/ubuntu/revvingadmin/build/
+      dest: /var/www/html
+      remote_src: yes
+      directory_mode: yes
+
+- name: Restart Nginx
+  service:
+      name: apache2
+      state: restarted
+      enabled: yes
