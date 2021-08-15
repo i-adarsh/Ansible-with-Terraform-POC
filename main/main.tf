@@ -17,6 +17,16 @@ module "security" {
     environment = "devlopment"
 }
 
+module "instance" {
+    source = "../module/instance"
+    subnet_id = module.network.subnet_id[0]
+    security_group = module.security.security_group
+    environment = "devlopment"
+    key = "Adarsh"
+    ssh_user = "ubuntu"
+    private_key_path = "~/Downloads/Adarsh.pem"
+}
+
 locals {
     vpc_id = module.network.vpc_id
     subnet_id = module.network.subnet_id

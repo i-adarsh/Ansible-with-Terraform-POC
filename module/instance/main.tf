@@ -10,20 +10,20 @@ resource "aws_instance" "revving" {
     Environment = "${var.environment}"
   }
 
-  provisioner "remote_exec" {
+  provisioner "remote-exec" {
     inline = ["echo 'Wait, Until SSH is Ready'"]
     connection {
       type = "ssh"
-      user = local.ssh_user
-      private_key = file(local.private_key_path)
+      user = var.ssh_user
+      private_key = file(var.private_key_path)
       host = aws_instance.revving.public_ip
     }
-    provisioner "local-exec" {
-      command = "ansible-playbook -i ${aws_instance.revving.public_ip}, --private-key ${local.private_key_path} setup.yml"
-    }
+  }
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ${aws_instance.revving.public_ip}, --private-key ${var.private_key_path} setup.yml"
   }
 }
 
-output "public_ip" {
+output "aws_ip" {
   value = aws_instance.revving.public_ip
 }
